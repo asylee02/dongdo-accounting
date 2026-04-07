@@ -28,9 +28,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate PWA icons
-        run: npm run generate-pwa-assets
-
       - name: Build
         run: npm run build
         env:
