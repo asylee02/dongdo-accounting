@@ -86,7 +86,6 @@ export default function Register() {
           ref={fileRef}
           type="file"
           accept="image/*"
-          capture="environment"
           className="hidden"
           onChange={handlePhoto}
         />
@@ -161,6 +160,11 @@ export default function Register() {
           {loading ? '등록 중...' : done ? '✓ 등록 완료!' : '등록하기'}
         </button>
       </form>
+
+      <div className='mt-5 font-bold'>
+        <p>* 조하빈 때문에 만들게 된 앱입니다</p>
+        <p>* 그렇게 됐다</p>
+      </div>
     </div>
   )
 }

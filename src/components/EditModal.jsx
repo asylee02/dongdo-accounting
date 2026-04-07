@@ -66,7 +66,7 @@ export default function EditModal({ record, onClose }) {
           >
             <img src={photoData} className="w-full h-full object-cover" alt="preview" />
           </div>
-          <input ref={fileRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handlePhoto} />
+          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
 
           <input
             type="text"
