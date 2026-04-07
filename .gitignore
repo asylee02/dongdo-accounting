@@ -1,0 +1,32 @@
+# Node.js dependencies
+node_modules/
+
+# 환경 변수 파일
+.env
+
+# 로그 파일
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 운영체제별 파일
+.DS_Store
+Thumbs.db
+
+# 빌드 결과물
+dist/
+build/
+
+# 테스트 커버리지
+coverage/
+
+# IDE 설정 파일
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# 기타
+*.log

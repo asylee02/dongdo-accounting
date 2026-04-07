@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="90" fill="#2563eb"/>
+  <rect x="120" y="140" width="272" height="232" rx="20" fill="white" opacity="0.15"/>
+  <rect x="140" y="160" width="232" height="192" rx="16" fill="white" opacity="0.2"/>
+  <text x="256" y="310"
+    font-size="160"
+    font-weight="900"
+    text-anchor="middle"
+    fill="white"
+    font-family="-apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif">회</text>
+  <text x="256" y="410"
+    font-size="64"
+    font-weight="700"
+    text-anchor="middle"
+    fill="white"
+    opacity="0.85"
+    font-family="-apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif">청년1부</text>
+</svg>
