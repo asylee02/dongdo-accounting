@@ -1,14 +1,26 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 
 export default function People() {
   const [expanded, setExpanded] = useState(null)
+  const [selectedMonth, setSelectedMonth] = useState('전체')
 
   const records = useLiveQuery(() => db.records.toArray(), []) || []
 
+  // 존재하는 월 목록 (최신순)
+  const months = useMemo(() => {
+    const set = new Set(records.map(r => r.createdAt.slice(0, 7)))
+    return ['전체', ...[...set].sort((a, b) => b.localeCompare(a))]
+  }, [records])
+
+  // 선택된 월에 맞게 필터링
+  const filtered = selectedMonth === '전체'
+    ? records
+    : records.filter(r => r.createdAt.startsWith(selectedMonth))
+
   const byPerson = {}
-  for (const r of records) {
+  for (const r of filtered) {
     if (!byPerson[r.name]) byPerson[r.name] = []
     byPerson[r.name].push(r)
   }
@@ -21,8 +33,14 @@ export default function People() {
     }))
     .sort((a, b) => b.total - a.total)
 
-  const grandTotal = records.reduce((s, r) => s + r.amount, 0)
+  const grandTotal = filtered.reduce((s, r) => s + r.amount, 0)
   const fmt = n => n.toLocaleString('ko-KR')
+
+  const fmtMonth = m => {
+    if (m === '전체') return '전체'
+    const [y, mo] = m.split('-')
+    return `${y}년 ${parseInt(mo)}월`
+  }
 
   const avatarColor = (name) => {
     const colors = [
@@ -40,6 +58,26 @@ export default function People() {
 
   return (
     <div className="p-4" style={{ paddingBottom: '6rem' }}>
+
+      {/* 월별 필터 탭 */}
+      {records.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-3 -mx-4 px-4 scrollbar-hide">
+          {months.map(m => (
+            <button
+              key={m}
+              onClick={() => { setSelectedMonth(m); setExpanded(null) }}
+              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                selectedMonth === m
+                  ? 'bg-blue-600 text-white shadow'
+                  : 'bg-white text-gray-500 border border-gray-200'
+              }`}
+            >
+              {fmtMonth(m)}
+            </button>
+          ))}
+        </div>
+      )}
+
       {records.length === 0 && (
         <div className="text-center text-gray-400 py-16">
           <svg className="w-16 h-16 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -49,12 +87,18 @@ export default function People() {
         </div>
       )}
 
+      {records.length > 0 && filtered.length === 0 && (
+        <div className="text-center text-gray-400 py-12">
+          <p className="text-sm">{fmtMonth(selectedMonth)}에 내역이 없습니다</p>
+        </div>
+      )}
+
       {/* Grand total */}
       {records.length > 0 && (
         <div className="bg-blue-600 text-white rounded-2xl p-4 mb-4 text-center shadow-md">
-          <p className="text-sm opacity-80 mb-1">전체 총합</p>
+          <p className="text-sm opacity-80 mb-1">{selectedMonth === '전체' ? '전체 총합' : `${fmtMonth(selectedMonth)} 총합`}</p>
           <p className="text-2xl font-bold">{fmt(grandTotal)}원</p>
-          <p className="text-sm opacity-70 mt-0.5">{people.length}명 · {records.length}건</p>
+          <p className="text-sm opacity-70 mt-0.5">{people.length}명 · {filtered.length}건</p>
         </div>
       )}
 
